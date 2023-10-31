@@ -50,7 +50,7 @@ class Question:
         self.correct_answer = ans
         return True
         pass
- def set_marks(self, num):
+    def set_marks(self, num):
         """
         Update instance variable marks.
         """
@@ -111,7 +111,7 @@ class Question:
                 opt_desc += "\n"
         return opt_desc
         pass
- def mark_response(self, response):
+    def mark_response(self, response):
         """
         Check if response matches the expected answer
         Parameter:

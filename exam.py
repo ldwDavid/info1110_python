@@ -103,6 +103,3 @@ class Exam:
             pview += "\n"
         return pview
         pass
-
-    def __str__(self):
-        pass

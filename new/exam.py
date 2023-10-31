@@ -58,7 +58,7 @@ class Exam:
         '''
         if ls[len(ls) - 1].qtype != "end":
             return False
-       for h in range(len(ls)):
+        for h in range(len(ls)):
             i = ls[h]
             if i.discription == "":
                 print("Description missing")
