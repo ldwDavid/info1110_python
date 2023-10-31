@@ -7,7 +7,7 @@ import candidate
 import io
 
 
-def extract_questions(fobj: io.TextIOWrapper)->list:
+def extract_questions(fobj: io.TextIOWrapper) -> list:
     """
     Parses fobj to extract details of each question found in the file.
     General procedure to extract question.
@@ -32,10 +32,37 @@ def extract_questions(fobj: io.TextIOWrapper)->list:
     Returns:
         result: list of Question objects.
     """
+    questions_list = []
+    for line in fobj:
+        # Assuming each question is separated by a line break
+        if line.strip() == "":
+            continue
+
+        qtype = line.strip()
+        description = next(fobj).strip()
+        possible_answers = next(fobj).strip().split(',')
+        expected_answer = next(fobj).strip()
+        marks = int(next(fobj).strip())
+
+        # Create a question object
+        q = question.Question(qtype)
+        q.set_description(description)
+        q.set_correct_answer(expected_answer)
+        q.set_marks(marks)
+        answer_opts = [(opt, False) for opt in possible_answers]
+        q.set_answer_options(answer_opts)
+
+        questions_list.append(q)
+
+    # Add an end question
+    end_question = question.Question("end")
+    questions_list.append(end_question)
+
+    return questions_list
     pass
 
 
-def sort(to_sort: list, order: int=0)->list:
+def sort(to_sort: list, order: int = 0) -> list:
     """
     Sorts to_sort depending on settings of order.
 
@@ -61,9 +88,18 @@ def sort(to_sort: list, order: int=0)->list:
     >>> print("Sort 2:", sort(to_sort, 2))
     Sort 2: ['strawberries', 'oranges', 'apples']
     """
+    if order == 0:
+        return to_sort
+    elif order == 1:
+        return sorted(to_sort)
+    elif order == 2:
+        return sorted(to_sort, reverse=True)
+    else:
+        raise ValueError("Invalid order value. It should be 0, 1, or 2.")
     pass
 
-def extract_students(fobj: io.TextIOWrapper)->list:
+
+def extract_students(fobj: io.TextIOWrapper) -> list:
     """
     Parses fobj to extract details of each student found in the file.
 
@@ -72,4 +108,16 @@ def extract_students(fobj: io.TextIOWrapper)->list:
     Returns:
         result: list of Candidate objects sorted in ascending order
     """
+    students_list = []
+    next(fobj)  # Explicitly skip the header line
+
+    for line in fobj:
+        sid, name, extra_time = line.strip().split(',')
+        extra_time = int(extra_time) if extra_time else 0  # Convert extra_time to int or default to 0
+
+        # Create a candidate object
+        student = candidate.Candidate(sid, name, extra_time)
+        students_list.append(student)
+
+    return sort(students_list,1)
     pass
