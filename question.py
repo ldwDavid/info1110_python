@@ -125,6 +125,29 @@ class Question:
         Returns:
             marks: int|float, marks awarded for the response.
         """
+        if self.qtype == "short":
+            # For short answer type, a direct comparison
+            if response.lower() == self.correct_answer.lower():
+                return self.marks
+            return 0
+        elif self.qtype == "single":
+            # For single choice, a direct comparison
+            if response.upper() == self.correct_answer.upper():
+                return self.marks
+            return 0
+        elif self.qtype == "multiple":
+            # For multiple choice, split and compare each choice
+            candidate_answers = set(response.upper().split(","))
+            correct_answers = set(self.correct_answer.upper().split(","))
+            correct_answer_count = len(correct_answers)
+
+            # Calculate marks for each correct answer
+            marks_per_answer = self.marks / correct_answer_count
+
+            # Award partial marks for each correct answer provided by the candidate
+            awarded_marks = sum([marks_per_answer for ans in candidate_answers if ans in correct_answers])
+            return awarded_marks
+        return 0
         pass
 
     def preview_question(self, i=0, show=True):
