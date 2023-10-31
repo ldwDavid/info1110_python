@@ -5,7 +5,7 @@ class Question:
 
     def __init__(self, qtype):
         # you'll need to check if qtype is valid before assigning it
-        self.qtype = None
+        self.set_type(qtype)
         self.description = None
         self.answer_options = []
         self.correct_answer = None
@@ -15,7 +15,10 @@ class Question:
         """
         Update instance variable qtype.
         """
-        self.qtype = qtype
+        if qtype in ["short", "single", "multiple", "end"]:
+            self.qtype = qtype
+            return True
+        return False
         pass
 
     def set_description(self, desc):
@@ -62,6 +65,7 @@ class Question:
         if num < 0:
             return False
         self.marks = num
+        return True
         pass
 
     def set_answer_options(self, opts):
@@ -188,9 +192,14 @@ Marks: {self.marks}
 
     pass
 
+
 def is_int(i):
     try:
         int(i)
         return True
     except:
         return False
+
+
+if __name__ == "__main__":
+    print("running question.py")
